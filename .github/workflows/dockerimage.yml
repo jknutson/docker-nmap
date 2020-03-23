@@ -11,15 +11,27 @@ jobs:
   build:
     runs-on: 'ubuntu-latest'
     steps:
+      - name: Docker Login
+        uses: azure/docker-login@v1
+        with:
+          login-server: docker.pkg.github.com
+          username: $GITHUB_ACTOR
+          password: ${{ secrets.GITHUB_TOKEN }}
       - uses: 'actions/checkout@v2'
       - name: 'Build the Docker image'
-        run: "docker build . --file Dockerfile --tag nmap:${GITHUB_RUN_ID}"
+        run: "docker build . --file Dockerfile --tag docker.pkg.github.com/${GITHUB_REPOSITORY}/nmap:${GITHUB_RUN_ID}"
   test:
     runs-on: 'ubuntu-latest'
     steps:
+      - name: Docker Login
+        uses: azure/docker-login@v1
+        with:
+          login-server: docker.pkg.github.com
+          username: $GITHUB_ACTOR
+          password: ${{ secrets.GITHUB_TOKEN }}
       - uses: 'e1himself/goss-installation-action@v1'
       - name: 'Test the Docker image'
         run: |
           export GOSS_FILES_STRATEGY=cp
           export GOSS_SLEEP=5
-          dgoss run -it --entrypoint bash nmap:${GITHUB_RUN_ID}
+          dgoss run -it --entrypoint bash docker.pkg.github.com/${GITHUB_REPOSITORY}/nmap:${GITHUB_RUN_ID}
