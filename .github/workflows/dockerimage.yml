@@ -11,11 +11,11 @@ jobs:
   build-test:
     runs-on: 'ubuntu-latest'
     steps:
+      - uses: 'actions/checkout@v2'
       - name: 'Build the Docker image'
-        uses: 'actions/checkout@v2'
         run: "docker build . --file Dockerfile --tag nmap:${GITHUB_RUN_ID}"
+      - uses: 'e1himself/goss-installation-action'
       - name: 'Test the Docker image'
-        uses: 'e1himself/goss-installation-action'
         run: |
           export GOSS_FILES_STRATEGY=cp
           export GOSS_SLEEP=5
