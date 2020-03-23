@@ -19,7 +19,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: 'actions/checkout@v2'
       - name: 'Build the Docker image'
-        run: "docker build . --file Dockerfile --tag docker.pkg.github.com/${GITHUB_REPOSITORY}/nmap:${GITHUB_RUN_ID}"
+        run: |
+          docker build . --file Dockerfile --tag docker.pkg.github.com/${GITHUB_REPOSITORY}/nmap:${GITHUB_RUN_ID}
+          docker push docker.pkg.github.com/${GITHUB_REPOSITORY}/nmap:${GITHUB_RUN_ID}
   test:
     runs-on: 'ubuntu-latest'
     steps:
