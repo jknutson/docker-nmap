@@ -1,0 +1,5 @@
+---
+truthy:
+  allowed-values:
+    - True
+    - False
